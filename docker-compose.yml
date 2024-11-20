@@ -1,0 +1,20 @@
+services:
+    voltix-front:
+       image: voltix_frontend
+       restart: unless-stopped
+       build:
+         context: .
+         dockerfile: Dockerfile.prod
+       working_dir: /usr/share/nginx/html
+       networks:
+         - voltix
+       ports:
+         - "8070:80"
+       volumes:
+         - ./public:/usr/share/html/public
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+
+networks:
+  voltix:
+        external: false
