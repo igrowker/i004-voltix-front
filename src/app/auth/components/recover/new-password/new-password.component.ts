@@ -1,5 +1,5 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -39,7 +39,7 @@ export class NewPasswordComponent {
     this.newPasswordForm = this.fb.group(
       {
         email: [this.userEmail, [Validators.required, Validators.email]],
-        newPassword: [
+        new_password: [
           '',
           [
             Validators.required,
@@ -49,7 +49,7 @@ export class NewPasswordComponent {
             this.specialCharacterValidator,
           ],
         ],
-        repeatPassword: ['', [Validators.required]],
+        confirm_password: ['', [Validators.required]],
       },
       {
         validators: this.passwordMatchValidator,
@@ -69,8 +69,8 @@ export class NewPasswordComponent {
 
   // Validación cruzada para las contraseñas
   passwordMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
-    const newPassword = group.get('newPassword')?.value;
-    const repeatPassword = group.get('repeatPassword')?.value;
+    const newPassword = group.get('new_password')?.value;
+    const repeatPassword = group.get('confirm_password')?.value;
     return newPassword && repeatPassword && newPassword !== repeatPassword
       ? { mismatch: true }
       : null;
