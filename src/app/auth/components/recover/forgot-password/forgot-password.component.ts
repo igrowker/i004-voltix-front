@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RecoverService } from '../service/recover.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,6 +22,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   fb = inject(FormBuilder);
   router = inject(Router);
+  recoverService = inject(RecoverService);
 
   ngOnInit(): void {
     this.buildForm();
@@ -35,15 +37,21 @@ export class ForgotPasswordComponent implements OnInit {
   onSubmit() {
     if (this.resetPasswordForm.valid) {
       const email = this.resetPasswordForm.get('email')?.value;
-      console.log('Restablecer contraseña para:', email);
-      // Lógica para enviar el correo de restablecimiento de contraseña
-      //Si se ha enviado todo ok, mostrar sección de se ha enviado el correo para restablecer contraseña
-      this.showSuccessSection = true;
+ 
+      this.recoverService.resetPassword({ email }).subscribe({
+        next: (response) => {
+          console.log('Correo enviado exitosamente:', response);
+          this.showSuccessSection = true;
+        },
+        error: (err) => {
+          console.error('Error al enviar correo de restablecimiento:', err);
+        },
+      });
     } else {
       this.resetPasswordForm.markAllAsTouched();
-      return;
     }
   }
+
 
   get isFormValid() {
     return this.resetPasswordForm.valid;
